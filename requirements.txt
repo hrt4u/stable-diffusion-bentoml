@@ -4,3 +4,4 @@ transformers
 diffusers
 ftfy
 pydantic
+accelerate==0.15.0
