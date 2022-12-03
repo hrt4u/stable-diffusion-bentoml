@@ -2,18 +2,20 @@ import uuid
 
 import httpx
 
-SD_SERVICE_URL = "65.108.32.156"
+SD_SERVICE_URL = "65.108.33.79"
 
 while True:
     r = httpx.post(
         f"http://{SD_SERVICE_URL}:3000/txt2img",
         json={
-            "prompt": "anamuseme in style of fullmetal alchemist",
-            "guidance_scale": 12,
-            "num_inference_steps": 45,
+            "prompt": "joyfreeze Anaglyph Artstation",
+            "negative_prompt": "fat, cropped face, ugly, deformed, deformity, ugliness",
+            "guidance_scale": 15,
+            "num_inference_steps": 42,
             "safety_check": False,
+            # "height": 752,
         },
-        timeout=30,
+        timeout=60,
     )
 
     if r.status_code == 200:
@@ -22,3 +24,5 @@ while True:
         with open(f"trash/{new_filename}", 'wb') as f:
             # r.content.decode_content = True
             f.write(r.content)
+    else:
+        print("error code: ", r.status_code, r.json())

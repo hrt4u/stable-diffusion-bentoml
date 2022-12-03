@@ -46,7 +46,7 @@ class StableDiffusionRunnable(bentoml.Runnable):
     @bentoml.Runnable.method(batchable=False, batch_dim=0)
     def txt2img(self, data):
         prompt = data["prompt"]
-        negative_prompt=data["negative_prompt"]
+        negative_prompt = data.get("negative_prompt")
         guidance_scale = data.get('guidance_scale', 7.5)
         height = data.get('height', 512)
         width = data.get('width', 512)
@@ -86,6 +86,7 @@ class StableDiffusionRunnable(bentoml.Runnable):
             init_image =init_image.resize(new_size)
 
         prompt = data["prompt"]
+        negative_prompt = data.get("negative_prompt")
         strength = data.get('strength', 0.8)
         guidance_scale = data.get('guidance_scale', 7.5)
         num_inference_steps = data.get('num_inference_steps', 50)
@@ -101,6 +102,7 @@ class StableDiffusionRunnable(bentoml.Runnable):
 
             images = self.img2img_pipe(
                 prompt=prompt,
+                negative_prompt=negative_prompt,
                 init_image=init_image,
                 strength=strength,
                 guidance_scale=guidance_scale,
@@ -113,6 +115,7 @@ class StableDiffusionRunnable(bentoml.Runnable):
     @bentoml.Runnable.method(batchable=False, batch_dim=0)
     def inpaint(self, image, mask, data):
         prompt = data["prompt"]
+        negative_prompt = data.get("negative_prompt")
         strength = data.get('strength', 0.8)
         guidance_scale = data.get('guidance_scale', 7.5)
         num_inference_steps = data.get('num_inference_steps', 50)
@@ -128,6 +131,7 @@ class StableDiffusionRunnable(bentoml.Runnable):
 
             images = self.inpaint_pipe(
                 prompt=prompt,
+                negative_prompt=negative_prompt,
                 init_image=image,
                 mask_image=mask,
                 strength=strength,
@@ -172,6 +176,7 @@ def txt2img(data, context):
 
 class Img2ImgInput(BaseModel):
     prompt: str
+    negative_prompt: str = ""
     strength: float = 0.8
     guidance_scale: float = 7.5
     num_inference_steps: int = 50
