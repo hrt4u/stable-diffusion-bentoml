@@ -131,3 +131,5 @@ output.jpg
 */main.tf
 # ignore downloads bento
 *.bento
+
+trash/
