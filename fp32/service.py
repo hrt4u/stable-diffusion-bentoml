@@ -46,6 +46,7 @@ class StableDiffusionRunnable(bentoml.Runnable):
     @bentoml.Runnable.method(batchable=False, batch_dim=0)
     def txt2img(self, data):
         prompt = data["prompt"]
+        negative_prompt=data["negative_prompt"]
         guidance_scale = data.get('guidance_scale', 7.5)
         height = data.get('height', 512)
         width = data.get('width', 512)
@@ -62,6 +63,7 @@ class StableDiffusionRunnable(bentoml.Runnable):
 
             images = self.txt2img_pipe(
                 prompt=prompt,
+                negative_prompt=negative_prompt,
                 guidance_scale=guidance_scale,
                 height=height,
                 width=width,
@@ -151,6 +153,7 @@ def generate_seed_if_needed(seed):
 
 class Txt2ImgInput(BaseModel):
     prompt: str
+    negative_prompt: str = ""
     guidance_scale: float = 7.5
     height: int = 512
     width: int = 512
